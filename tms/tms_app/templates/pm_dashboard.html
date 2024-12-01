@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Dashboard Content -->
+<div class="container mt-5">
+    <h2 class="mb-4">Welcome, Project Manager</h2>
+
+    <!-- Projects Section -->
+    <div class="mb-5">
+        <h4>Your Projects</h4>
+        <div class="list-group">
+            {% for project in projects %}
+                <a href="{% url 'project_detail' project.id %}" class="list-group-item list-group-item-action">
+                    <h5>{{ project.name }}</h5>
+                    <p>{{ project.description }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Tasks Section -->
+    <div class="mb-5">
+        <h4>Manage Tasks</h4>
+        <a href="{% url 'create_task' %}" class="btn btn-success mb-3">Create New Task</a>
+        <div class="list-group">
+            {% for task in tasks %}
+                <a href="{% url 'task_detail' task.id %}" class="list-group-item list-group-item-action">
+                    <h5>{{ task.title }}</h5>
+                    <p>Status: {{ task.status }}</p>
+                    <small>Assigned to: {{ task.assigned_to.username }}</small>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Team Members Section -->
+    <div class="mb-5">
+        <h4>Your Team</h4>
+        <div class="list-group">
+            {% for member in team_members %}
+                <a href="{% url 'team_member_detail' member.id %}" class="list-group-item list-group-item-action">
+                    <h5>{{ member.username }}</h5>
+                    <p>Role: {{ member.role }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

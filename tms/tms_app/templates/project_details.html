@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Project Details Section -->
+<div class="container mt-5">
+    <h2 class="mb-4">{{ project.name }}</h2>
+    <p><strong>Description:</strong> {{ project.description }}</p>
+    <p><strong>Leader:</strong> {{ project.leader.username }}</p>
+    <p><strong>Team Members:</strong></p>
+    <ul>
+        {% for member in project.team_members.all %}
+        <li>{{ member.username }}</li>
+        {% empty %}
+        <li>No team members assigned yet.</li>
+        {% endfor %}
+    </ul>
+
+    <h4 class="mt-4">Tasks</h4>
+    <!-- Task List Table -->
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Task Name</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in project.tasks.all %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ task.name }}</td>
+                <td>{{ task.assigned_to.username }}</td>
+                <td>{{ task.get_status_display }}</td>
+                <td>
+                    <!-- View Task (visible to all users) -->
+                    <a href="{% url 'view_task' task.id %}" class="btn btn-info btn-sm">View</a>
+
+                    <!-- Edit Task (visible to Project Manager and Team Leader) -->
+                    {% if user.role == 'Project Manager' or user.role == 'Team Leader' %}
+                    <a href="{% url 'edit_task' task.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    {% endif %}
+
+                    <!-- Update Task Status (visible to Team Members assigned to the task) -->
+                    {% if user == task.assigned_to %}
+                    <a href="{% url 'update_task_status' task.id %}" class="btn btn-primary btn-sm">Update Status</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">No tasks assigned to this project yet</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Action Buttons for Project Manager -->
+    {% if user.role == 'Project Manager' %}
+    <div class="mt-3">
+        <a href="{% url 'edit_project' project.id %}" class="btn btn-warning">Edit Project</a>
+        <a href="{% url 'delete_project' project.id %}" class="btn btn-danger">Delete Project</a>
+    </div>
+    {% endif %}
+
+    <!-- Back to Project List Button -->
+    <a href="{% url 'project_list' %}" class="btn btn-secondary mt-3">Back to Project List</a>
+</div>
+
+{% endblock %}

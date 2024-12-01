@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Form for Creating Project -->
+<div class="container mt-5">
+    <h2 class="mb-4">Create a New Project</h2>
+
+    <form method="POST" action="{% url 'create_project' %}">
+        {% csrf_token %}
+        
+        <!-- Project Name -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Project Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter project name" required>
+        </div>
+
+        <!-- Project Description -->
+        <div class="mb-3">
+            <label for="description" class="form-label">Project Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter project description" required></textarea>
+        </div>
+
+        <!-- Project Leader -->
+        <div class="mb-3">
+            <label for="leader" class="form-label">Assign Project Leader</label>
+            <select class="form-select" id="leader" name="leader" required>
+                <option value="" disabled selected>Select a leader</option>
+                {% for user in team_leaders %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Create Project</button>
+    </form>
+
+    <!-- Cancel Button -->
+    <a href="{% url 'pm_dashboard' %}" class="btn btn-secondary mt-3">Cancel</a>
+</div>
+
+{% endblock %}

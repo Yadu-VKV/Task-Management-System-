@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow p-4" style="width: 500px;">
+      <h3 class="text-center mb-4">Register User</h3>
+      
+      <!-- Display Messages -->
+      {% if messages %}
+      <div class="alert alert-info">
+          {% for message in messages %}
+              <p>{{ message }}</p>
+          {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Registration Form -->
+      <form method="post" action="{% url 'register' %}">
+          {% csrf_token %}
+          <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+          </div>
+          <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
+          </div>
+          <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+          </div>
+          <div class="mb-3">
+              <label for="role" class="form-label">Role</label>
+              <select class="form-select" id="role" name="role" required>
+                  <option value="">-- Select Role --</option>
+                  <option value="Team Leader">Team Leader</option>
+                  <option value="Team Member">Team Member</option>
+              </select>
+          </div>
+          <button type="submit" class="btn btn-success w-100">Register</button>
+      </form>
+      
+      <hr class="my-4">
+      
+      <p class="text-center">
+          <a href="{% url 'dashboard' %}" class="text-decoration-none">Back to Dashboard</a>
+      </p>
+  </div>
+</div>
+
+{% endblock %}

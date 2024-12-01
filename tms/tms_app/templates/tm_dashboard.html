@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Dashboard Content -->
+<div class="container mt-5">
+    <h2 class="mb-4">Welcome, Team Member</h2>
+
+    <!-- Tasks Assigned to the Team Member -->
+    <div class="mb-5">
+        <h4>Your Tasks</h4>
+        <div class="list-group">
+            {% for task in tasks %}
+                <a href="{% url 'task_detail' task.id %}" class="list-group-item list-group-item-action">
+                    <h5>{{ task.title }}</h5>
+                    <p>Status: {{ task.status }}</p>
+                    <small>Assigned by: {{ task.assigned_by.username }}</small>
+                    <small class="d-block">Project: {{ task.project.name }}</small>
+                    <p><strong>Due Date:</strong> {{ task.due_date }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Team Section (If Team Member needs to view colleagues) -->
+    <div class="mb-5">
+        <h4>Your Team</h4>
+        <div class="list-group">
+            {% for member in team_members %}
+                <a href="{% url 'team_member_detail' member.id %}" class="list-group-item list-group-item-action">
+                    <h5>{{ member.username }}</h5>
+                    <p>Role: {{ member.role }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

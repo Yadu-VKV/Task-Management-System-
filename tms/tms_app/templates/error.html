@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Error Message -->
+<div class="container mt-5 text-center">
+    <div class="card border-danger">
+        <div class="card-header bg-danger text-white">
+            <h3>Error</h3>
+        </div>
+        <div class="card-body">
+            <p class="lead text-danger">{{ error_message }}</p>
+            <p>If you believe this is a mistake, please contact the system administrator.</p>
+            <a href="{% url 'home' %}" class="btn btn-primary">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

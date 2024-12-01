@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- Task Details Section -->
+<div class="container mt-5">
+    <h2 class="mb-4">Task Details: {{ task.name }}</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Description</h5>
+            <p class="card-text">{{ task.description }}</p>
+
+            <h5 class="card-title">Assigned To</h5>
+            <p class="card-text">{{ task.assigned_to.username }}</p>
+
+            <h5 class="card-title">Status</h5>
+            <p class="card-text">{{ task.get_status_display }}</p>
+
+            <h5 class="card-title">Due Date</h5>
+            <p class="card-text">{{ task.due_date|date:"F d, Y" }}</p>
+        </div>
+    </div>
+
+    {% if user.role in ['Project Manager', 'Team Leader'] or (user.role == 'Team Member' and task.assigned_to == user) %}
+    <h3 class="mt-4">Update Task Status</h3>
+    <form method="POST" action="{% url 'edit_task_status' task.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="status" class="form-label">Change Status</label>
+            <select name="status" id="status" class="form-select">
+                {% for key, value in task.STATUS_CHOICES %}
+                <option value="{{ key }}" {% if task.status == key %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+    </form>
+    {% endif %}
+
+    <h3 class="mt-4">Comments</h3>
+    <div class="mb-4">
+        {% for comment in task.comments.all %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <p class="card-text"><strong>{{ comment.user.username }}</strong>:</p>
+                <p class="card-text">{{ comment.text }}</p>
+                <p class="text-muted small">{{ comment.created_at|date:"F d, Y H:i" }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p>No comments yet. Be the first to add one!</p>
+        {% endfor %}
+    </div>
+
+    <form method="POST" action="{% url 'add_comment' task.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="comment" class="form-label">Add Comment</label>
+            <textarea name="comment" id="comment" rows="3" class="form-control" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Add Comment</button>
+    </form>
+
+    <a href="{% url 'project_details' task.project.id %}" class="btn btn-secondary mt-4">Back to Project</a>
+</div>
+
+{% endblock %}

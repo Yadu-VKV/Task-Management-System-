@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- User List -->
+<div class="container mt-5">
+<h2 class="mb-4">User List</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-primary">
+        <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.profile.role }}</td>
+            <td>
+                <a href="{% url 'edit_user' user.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'delete_user' user.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No users found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'create_user' %}" class="btn btn-primary">Add New User</a>
+<a href="{% url 'pm_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+{% endblock %}
